@@ -63,7 +63,7 @@ dependencies {
     val lifecycleVersion = "2.8.5"
 
     implementation("androidx.room:room-runtime:$roomVersion")
-    kapt ("androidx.room:room-compiler:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1 ")
 
 
     //Optional for coroutines
