@@ -3,45 +3,39 @@ package com.example.inventure
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.inventure.ui.theme.InventureTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            InventureTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            MainApp()
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun MainApp() {
+    var currentScreen by remember { mutableStateOf("add") }
+    var products by remember { mutableStateOf(listOf<Product>()) }
+
+    when (currentScreen) {
+        "add" -> AddProductScreen(
+            onAddProduct = {
+                products = products + it
+                currentScreen = "view" // ✅ Go to the view screen after adding
+            }
+        )
+        "view" -> ViewProductScreen(
+            products = products,
+            onBackClick = { currentScreen = "add" } // ✅ Back arrow leads back to add screen
+        )
+    }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun GreetingPreview() {
-    InventureTheme {
-        Greeting("Android")
-    }
+fun MainAppPreview() {
+    MainApp()
 }
